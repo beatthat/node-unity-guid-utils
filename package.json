@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --recursive --reporter spec",
+    "clean": "rm -f *.tgz *.log *.swp",
     "version": "git add -A",
     "postversion": "git push && git push --tags && npm run clean"
   },
