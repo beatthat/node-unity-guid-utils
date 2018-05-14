@@ -1,0 +1,37 @@
+{
+  "name": "node-unity-replace-guids",
+  "version": "1.0.0",
+  "description": "Find all the instances of a set of guids in unity scene or prefab (yaml) files and replace them with a set of mapped guids. Common js yaml parsers can't read or write unity's yaml for scenes and prefabs because of the use of tags. This library sidesteps yaml issues by making replacements using regular expressions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --recursive --reporter spec",
+    "version": "git add -A",
+    "postversion": "git push && git push --tags && npm run clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beatthat/node-unity-replace-guids.git"
+  },
+  "files": [
+    "lib"
+  ],
+  "keywords": [],
+  "author": "larrykirschner@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/beatthat/node-unity-replace-guids/issues"
+  },
+  "homepage": "https://github.com/beatthat/node-unity-replace-guids#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-files": "^1.4.0"
+  },
+  "dependencies": {
+    "fs-extra-promise": "^1.0.1",
+    "mocha": "^5.1.1",
+    "node-yaml": "^3.1.1",
+    "path": "^0.12.7",
+    "readline": "^1.3.0",
+    "tmp-promise": "^1.0.4"
+  }
+}
