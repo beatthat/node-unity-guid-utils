@@ -15,7 +15,7 @@ const {replaceGuids} = require('../lib')
 
 const VERBOSE = false
 
-describe.only("merge meta files", () => {
+describe("merge meta files", () => {
 
     it("recursively copies .meta files from a source path to a target path when no file exists at target path", async function() {
         expect(true).to.equal(false)
