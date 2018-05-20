@@ -33,8 +33,8 @@ describe("replace guids", () => {
         const pathWrite = path.join(outDir.path, 'example-unity-prefab-result.prefab')
 
         const result = await replaceGuids({
-            path_read: pathRead,
-            path_write: pathWrite,
+            path_source: pathRead,
+            path_target: pathWrite,
             guid_map: guidMap
         })
 
