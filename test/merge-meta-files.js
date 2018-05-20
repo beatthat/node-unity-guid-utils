@@ -66,7 +66,6 @@ const writeMetaFiles = async (tgtPath, dirContents) => {
 describe("merge meta files", () => {
 
     beforeEach(async function() {
-      console.log('BEFORE EACH')
       const tmpDir = await tmp.dir()
 
       sourcePath = path.join(tmpDir.path, 'copy_from')
@@ -92,7 +91,7 @@ describe("merge meta files", () => {
       const f2Content = filesAtSourcePath.files.find(c => c.name === 'f2.meta')
     })
 
-    it.only(`preserves the guid of existing meta files under the target path,
+    it(`preserves the guid of existing meta files under the target path,
       otherwise replacing the target with the source`, async function() {
 
       await mergeMetaFiles({
@@ -105,16 +104,6 @@ describe("merge meta files", () => {
 
       const f1TargetPath = path.join(targetPath, 'f1.meta')
       f1TargetContent = filesAtTargetPath.files.find(c => c.name === 'f1.meta')
-
-      console.log(`\n\nthis is what's at target path ${f1TargetPath}...`)
-      console.log(`${await fs.readFileAsync(f1TargetPath, 'utf8')}`)
-
-
-      console.log(`\n\nthis is what's EXPECTED\n ${JSON.stringify({
-        ...f1TargetContent,
-        ...f1SourceContent,
-        guid: f1TargetContent.guid
-      }, null, 2)}...`)
 
       expect(await fs.readFileAsync(f1TargetPath, 'utf8'),
           `${f1TargetPath}
