@@ -13,7 +13,7 @@ const dir = chaiFiles.dir
 
 const {syncMissingMetaFiles} = require('../lib')
 
-const VERBOSE = true
+const VERBOSE = false
 
 const writeMetaFiles = async (tgtPath, dirContents) => {
 
@@ -24,7 +24,7 @@ const writeMetaFiles = async (tgtPath, dirContents) => {
     })
 }
 
-describe.only("sync missing meta files", () => {
+describe("sync missing meta files", () => {
 
     it("copies meta files recursively from a source path to a target path, skipping target paths that already exist", async function() {
         const filesAtTargetPath = {
