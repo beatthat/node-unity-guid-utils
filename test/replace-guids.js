@@ -1,6 +1,6 @@
 const path = require('path')
 const tmp = require('tmp-promise')
-const fs = require('fs-extra-promise')
+const fs = require('fs-extra')
 
 const chai = require('chai')
 const chaiFiles = require('chai-files')

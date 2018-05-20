@@ -1,6 +1,6 @@
 const path = require('path')
 const tmp = require('tmp-promise')
-const fs = require('fs-extra-promise')
+const fs = require('fs-extra')
 
 const chai = require('chai')
 const chaiFiles = require('chai-files')
@@ -56,9 +56,9 @@ var sourcePath = null;
 var targetPath = null;
 
 const writeMetaFiles = async (tgtPath, dirContents) => {
-    await fs.mkdirAsync(tgtPath)
+    await fs.mkdir(tgtPath)
     dirContents.files.forEach(async (n) => {
-      await fs.writeFileAsync(path.join(tgtPath, n.name),
+      await fs.writeFile(path.join(tgtPath, n.name),
       JSON.stringify(n, null, 2))
     })
 }
@@ -84,7 +84,7 @@ describe("merge meta files", () => {
 
       const f2Path = path.join(targetPath, 'f2.meta')
 
-      expect(await fs.existsAsync(f2Path),
+      expect(await fs.exists(f2Path),
           `${f2Path} DID NOT exist under target path and should be copied from source`
       ).to.equal(true)
 
@@ -105,7 +105,7 @@ describe("merge meta files", () => {
       const f1TargetPath = path.join(targetPath, 'f1.meta')
       f1TargetContent = filesAtTargetPath.files.find(c => c.name === 'f1.meta')
 
-      expect(await fs.readFileAsync(f1TargetPath, 'utf8'),
+      expect(await fs.readFile(f1TargetPath, 'utf8'),
           `${f1TargetPath}
           existed under both source *AND* target.
           The merged result at target should retain the target's guid
