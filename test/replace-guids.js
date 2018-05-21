@@ -21,7 +21,7 @@ const guidMap = {
     '0000000000000000f000000000000000' : 'aaaaa00000000000f000000000000000'
 }
 
-const filesAtTargetPath = {
+const fileContent = {
   files: [
       {
         name: 'f1.unity',
@@ -52,6 +52,37 @@ const filesAtTargetPath = {
   ]
 }
 
+const fileContentExpectedAfterReplaceGuid = {
+  files: [
+      {
+        name: 'f1.unity',
+        m_Script: {fileID: -765806418, guid: 'fffffc52d1564df4a8936ccd202a3bd8', type: 3},
+        targetOnlyProp: 'f1tgtpropval',
+        commonProp: 'targetValOfCommonProp'
+      },
+      {
+        name: 'f1.unity.meta',
+        guid: 'f5f67c52d1564df4a8936ccd202a3bd8',
+        commonProp: 'ignore me, a xxx.unity.meta file'
+      },
+      {
+        name: 'f2.prefab',
+        m_Script: {fileID: -765806418, guid: 'aaaaa00000000000f000000000000000', type: 3},
+        otherpropmore: 'f3tgtpropval'
+      },
+      {
+        name: 'f2.prefab.meta',
+        guid: 'f5f67c52d1564df4a8936ccd202a3bd8',
+        commonProp: 'ignore me, a xxx.prefab.meta file'
+      },
+      {
+        name: 'f2.cs',
+        guid: 'f5f67c52d1564df4a8936ccd202a3bd8',
+        commonProp: 'ignore me, a cs file'
+      }
+  ]
+}
+
 var targetPath = null;
 
 describe("replace guids", () => {
@@ -61,7 +92,7 @@ describe("replace guids", () => {
 
       targetPath = path.join(tmpDir.path, 'target_dir')
 
-      await writeJsonFiles(targetPath, filesAtTargetPath)
+      await writeJsonFiles(targetPath, fileContent)
     })
 
     it("replaces guids in a single (real-example) unity prefab file", async function() {
@@ -77,7 +108,7 @@ describe("replace guids", () => {
 
         await fs.copy(pathCopyFrom, pathTest)
 
-        const result = await replaceGuids({
+        await replaceGuids({
             path: pathTest,
             guid_map: guidMap
         })
@@ -89,15 +120,20 @@ describe("replace guids", () => {
         ).to.equal(file(pathTest))
     })
 
-    it.skip("recursively replaces guids in .unity", async function() {
+    it("recursively replaces guids in .unity files", async function() {
 
+      const fnameTest = 'f1.unity'
+      const pathTest = path.join(targetPath, fnameTest)
+      const contentExpected = fileContentExpectedAfterReplaceGuid.files.find(c => c.name === fnameTest)
 
-      const f1Path = path.join(targetPath, 'f1.meta')
-      const f1Content = filesAtTargetPath.files.find(c => c.name === 'f1.meta')
+      await replaceGuids({
+          path: targetPath,
+          guid_map: guidMap
+      })
 
-      expect(await fs.readFile(f1Path, 'utf8'),
-        `${f1Path}  existed at target and should be left unchanged`
-      ).to.equal(JSON.stringify(f1Content, null, 2))
+      expect((await fs.readFile(pathTest, 'utf8')).trim(),
+        `${pathTest} is a .unity file and should have its guids updated`
+      ).to.equal(JSON.stringify(contentExpected, null, 2).trim())
     })
 
 })
