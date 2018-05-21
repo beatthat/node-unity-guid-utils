@@ -12,17 +12,9 @@ const file = chaiFiles.file
 const dir = chaiFiles.dir
 
 const {syncMissingMetaFiles} = require('../lib')
+const {writeJsonFiles} = require('./test_helpers')
 
 const VERBOSE = false
-
-const writeMetaFiles = async (tgtPath, dirContents) => {
-
-    await fs.mkdir(tgtPath)
-    dirContents.files.forEach(async (n) => {
-      await fs.writeFile(path.join(tgtPath, n.name),
-      JSON.stringify(n, null, 2))
-    })
-}
 
 describe("sync missing meta files", () => {
 
@@ -68,8 +60,8 @@ describe("sync missing meta files", () => {
         const sourcePath = path.join(tmpDir.path, 'copy_from')
         const targetPath = path.join(tmpDir.path, 'copy_to')
 
-        await writeMetaFiles(sourcePath, filesAtSourcePath)
-        await writeMetaFiles(targetPath, filesAtTargetPath)
+        await writeJsonFiles(sourcePath, filesAtSourcePath)
+        await writeJsonFiles(targetPath, filesAtTargetPath)
 
         await syncMissingMetaFiles({
           path_source: sourcePath,

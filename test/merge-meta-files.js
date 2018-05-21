@@ -12,6 +12,7 @@ const file = chaiFiles.file
 const dir = chaiFiles.dir
 
 const {mergeMetaFiles} = require('../lib')
+const {writeJsonFiles} = require('./test_helpers')
 
 const VERBOSE = true
 
@@ -55,14 +56,6 @@ const filesAtSourcePath = {
 var sourcePath = null;
 var targetPath = null;
 
-const writeMetaFiles = async (tgtPath, dirContents) => {
-    await fs.mkdir(tgtPath)
-    dirContents.files.forEach(async (n) => {
-      await fs.writeFile(path.join(tgtPath, n.name),
-      JSON.stringify(n, null, 2))
-    })
-}
-
 describe("merge meta files", () => {
 
     beforeEach(async function() {
@@ -71,8 +64,8 @@ describe("merge meta files", () => {
       sourcePath = path.join(tmpDir.path, 'copy_from')
       targetPath = path.join(tmpDir.path, 'copy_to')
 
-      await writeMetaFiles(sourcePath, filesAtSourcePath)
-      await writeMetaFiles(targetPath, filesAtTargetPath)
+      await writeJsonFiles(sourcePath, filesAtSourcePath)
+      await writeJsonFiles(targetPath, filesAtTargetPath)
     })
 
     it("recursively copies .meta files from a source path to a target path when no file exists at target path", async function() {
