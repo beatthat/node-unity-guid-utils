@@ -45,7 +45,7 @@ const fileContent = {
         commonProp: 'ignore me, a xxx.prefab.meta file'
       },
       {
-        name: 'f2.cs',
+        name: 'f3.cs',
         guid: 'f5f67c52d1564df4a8936ccd202a3bd8',
         commonProp: 'ignore me, a cs file'
       }
@@ -76,7 +76,7 @@ const fileContentExpectedAfterReplaceGuid = {
         commonProp: 'ignore me, a xxx.prefab.meta file'
       },
       {
-        name: 'f2.cs',
+        name: 'f3.cs',
         guid: 'f5f67c52d1564df4a8936ccd202a3bd8',
         commonProp: 'ignore me, a cs file'
       }
@@ -133,6 +133,38 @@ describe("replace guids", () => {
 
       expect((await fs.readFile(pathTest, 'utf8')).trim(),
         `${pathTest} is a .unity file and should have its guids updated`
+      ).to.equal(JSON.stringify(contentExpected, null, 2).trim())
+    })
+
+    it("recursively replaces guids in .prefab files", async function() {
+
+      const fnameTest = 'f2.prefab'
+      const pathTest = path.join(targetPath, fnameTest)
+      const contentExpected = fileContentExpectedAfterReplaceGuid.files.find(c => c.name === fnameTest)
+
+      await replaceGuids({
+          path: targetPath,
+          guid_map: guidMap
+      })
+
+      expect((await fs.readFile(pathTest, 'utf8')).trim(),
+        `${pathTest} is a .prefab file and should have its guids updated`
+      ).to.equal(JSON.stringify(contentExpected, null, 2).trim())
+    })
+
+    it("ignores .cs files", async function() {
+
+      const fnameTest = 'f3.cs'
+      const pathTest = path.join(targetPath, fnameTest)
+      const contentExpected = fileContentExpectedAfterReplaceGuid.files.find(c => c.name === fnameTest)
+
+      await replaceGuids({
+          path: targetPath,
+          guid_map: guidMap
+      })
+
+      expect((await fs.readFile(pathTest, 'utf8')).trim(),
+        `${pathTest} is a .cs file and should NOT have its guids updated`
       ).to.equal(JSON.stringify(contentExpected, null, 2).trim())
     })
 
