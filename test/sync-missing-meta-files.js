@@ -1,6 +1,7 @@
 const path = require('path')
 const tmp = require('tmp-promise')
 const fs = require('fs-extra')
+const YAML = require('yamljs')
 
 const chai = require('chai')
 const chaiFiles = require('chai-files')
@@ -74,7 +75,7 @@ describe("sync missing meta files", () => {
 
         expect(await fs.readFile(f1Path, 'utf8'),
           `${f1Path}  existed at target and should be left unchanged`
-        ).to.equal(JSON.stringify(f1Content, null, 2))
+        ).to.equal(YAML.stringify(f1Content, null, 2))
 
         const f2Path = path.join(targetPath, 'f2.meta')
 
@@ -86,7 +87,7 @@ describe("sync missing meta files", () => {
 
         expect(await fs.readFile(f2Path, 'utf8'),
             `${f2Path} DID NOT exist under target path and should be copied from source`
-        ).to.equal(JSON.stringify(f2Content, null, 2))
+        ).to.equal(YAML.stringify(f2Content, null, 2))
 
 
         const f3Path = path.join(targetPath, 'f3.meta')
@@ -94,14 +95,14 @@ describe("sync missing meta files", () => {
 
         expect(await fs.readFile(f3Path, 'utf8'),
             `${f3Path} existed under target path and not under source path and it should be unchanged under target path`
-        ).to.equal(JSON.stringify(f3Content, null, 2))
+        ).to.equal(YAML.stringify(f3Content, null, 2))
 
         const f4SourcePath = path.join(sourcePath, 'f4.json')
         const f4Content = filesAtSourcePath.files.find(c => c.name === 'f4.json')
 
         expect(await fs.readFile(f4SourcePath, 'utf8'),
             `${f4SourcePath} should exist under source path with json content and json file extension`
-        ).to.equal(JSON.stringify(f4Content, null, 2))
+        ).to.equal(YAML.stringify(f4Content, null, 2))
 
         const f4TargetPath = path.join(targetPath, 'f4.json')
 

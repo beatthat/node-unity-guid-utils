@@ -1,6 +1,7 @@
 const path = require('path')
 const tmp = require('tmp-promise')
 const fs = require('fs-extra')
+const YAML = require('yamljs')
 
 const chai = require('chai')
 const chaiFiles = require('chai-files')
@@ -104,7 +105,7 @@ describe("merge meta files", () => {
           The merged result at target should retain the target's guid
           but otherwise all properties common to source and target should be merged
           with preference for the source file's value of each property.`
-      ).to.equal(JSON.stringify({
+      ).to.equal(YAML.stringify({
         ...f1TargetContent,
         ...f1SourceContent,
         guid: f1TargetContent.guid

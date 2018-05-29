@@ -1,6 +1,7 @@
 const path = require('path')
 const tmp = require('tmp-promise')
 const fs = require('fs-extra')
+const YAML = require('yamljs')
 
 const chai = require('chai')
 const chaiFiles = require('chai-files')
@@ -133,7 +134,7 @@ describe("replace guids", () => {
 
       expect((await fs.readFile(pathTest, 'utf8')).trim(),
         `${pathTest} is a .unity file and should have its guids updated`
-      ).to.equal(JSON.stringify(contentExpected, null, 2).trim())
+      ).to.equal(YAML.stringify(contentExpected, null, 2).trim())
     })
 
     it("recursively replaces guids in .prefab files", async function() {
@@ -149,7 +150,7 @@ describe("replace guids", () => {
 
       expect((await fs.readFile(pathTest, 'utf8')).trim(),
         `${pathTest} is a .prefab file and should have its guids updated`
-      ).to.equal(JSON.stringify(contentExpected, null, 2).trim())
+      ).to.equal(YAML.stringify(contentExpected, null, 2).trim())
     })
 
     it("ignores .cs files", async function() {
@@ -165,7 +166,7 @@ describe("replace guids", () => {
 
       expect((await fs.readFile(pathTest, 'utf8')).trim(),
         `${pathTest} is a .cs file and should NOT have its guids updated`
-      ).to.equal(JSON.stringify(contentExpected, null, 2).trim())
+      ).to.equal(YAML.stringify(contentExpected, null, 2).trim())
     })
 
 })
