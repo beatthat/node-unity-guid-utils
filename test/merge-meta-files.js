@@ -85,6 +85,23 @@ describe("merge meta files", () => {
       const f2Content = filesAtSourcePath.files.find(c => c.name === 'f2.meta')
     })
 
+    it.only("ignores .meta files excluded by filter", async function() {
+
+      await mergeMetaFiles({
+        path_source: sourcePath,
+        path_target: targetPath,
+        filter: (src, dst) => {
+          return String(src).match(/.*f2.meta$/) === null
+        }
+      })
+
+      const f2Path = path.join(targetPath, 'f2.meta')
+
+      expect(await fs.exists(f2Path),
+          `${f2Path} should have been excluded from copy by filter`
+      ).to.be.false
+    })
+
     it(`preserves the guid of existing meta files under the target path,
       otherwise replacing the target with the source`, async function() {
 
